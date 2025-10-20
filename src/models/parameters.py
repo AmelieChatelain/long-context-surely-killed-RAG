@@ -31,6 +31,7 @@ class RAGParams:
     embedding_price_per_million: float = 0.12
     rerank_price_per_query: float = 0.002
     rerank_top_k: int = 20
+    rerank_context_limit: int = 4096
     vector_db_base_cost: float = 26.0
 
 
