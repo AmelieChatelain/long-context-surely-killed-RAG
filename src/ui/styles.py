@@ -187,6 +187,76 @@ CUSTOM_CSS = """
     border-radius: 4px;
     font-size: 0.9em;
 }
+
+/* Reference library styling */
+.reference-hero {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(118, 75, 162, 0.12));
+    border: 1px solid rgba(102, 126, 234, 0.25);
+}
+
+.reference-hero-icon {
+    font-size: 2.5rem;
+}
+
+.reference-hero-content h3 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #3b3b98;
+}
+
+.reference-hero-content p {
+    margin: 0;
+    color: #495057;
+    font-size: 1rem;
+}
+
+.reference-card {
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    padding: 0.9rem;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.reference-card.reference-card-selected {
+    border: 1px solid #667eea;
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.25);
+}
+
+.reference-card-body {
+    margin: 0;
+    color: #5c6c80;
+    font-size: 0.95rem;
+}
+
+.stButton > button[kind="primary"] {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+}
+
+.stButton > button[kind="secondary"] {
+    background: white;
+    color: #3b3b98;
+    border: 1px solid #764ba2;
+}
+
+.stButton > button {
+    border-radius: 999px;
+    padding: 0.5rem 0.75rem;
+}
 </style>
 """
 

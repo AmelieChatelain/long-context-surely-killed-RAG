@@ -1,11 +1,55 @@
 """Reusable UI components for the calculator."""
 
+from functools import cache
+from pathlib import Path
 from typing import Optional
 
 import streamlit as st
 
 from ..calculators.base import CalculationResult
 from ..utils.formatting import format_currency, format_latency, format_number, format_percentage
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+RESOURCE_ROOT = PROJECT_ROOT / "resources"
+
+REFERENCE_DOCS = [
+    {
+        "key": "pricing",
+        "label": "Pricing Methodology",
+        "emoji": "💵",
+        "description": "How we anchor LLM, embedding, rerank, and vector database costs.",
+        "path": RESOURCE_ROOT / "PRICING.md",
+    },
+    {
+        "key": "latency",
+        "label": "Latency Benchmarks",
+        "emoji": "⏱️",
+        "description": "Source data for TTFT, decode throughput, and RAG-specific timings.",
+        "path": RESOURCE_ROOT / "LATENCY.md",
+        "images": [
+            {
+                "path": RESOURCE_ROOT / "latency_per_token_input.png",
+                "caption": "Artificial Analysis P50 latency per input token (snapshot captured locally).",
+            }
+        ],
+    },
+    {
+        "key": "token_density",
+        "label": "Token-per-Page Guide",
+        "emoji": "📄",
+        "description": "Heuristics for mapping document formats to token counts, including image-heavy PDFs.",
+        "path": RESOURCE_ROOT / "TOKEN_PER_PAGE.md",
+    },
+]
+
+
+@cache
+def _load_markdown(path: Path) -> str:
+    """Load markdown content from disk, caching results for responsiveness."""
+    try:
+        return path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return f"_Unable to locate {path.name}. Ensure the document is present in `resources/`._"
 
 
 def build_metric_card_html(
@@ -235,6 +279,65 @@ def render_cost_breakdown(result: CalculationResult) -> None:
             st.markdown("**Other costs**")
             for key, value in other_entries:
                 st.text(f"{key.replace('_', ' ').title()}: {format_currency(value, 4)}")
+
+
+def render_reference_library() -> None:
+    """Render a polished view of supporting documentation."""
+    st.markdown(
+        """
+        <div class="reference-hero">
+            <div class="reference-hero-icon">📚</div>
+            <div class="reference-hero-content">
+                <h3>Your Reference Library</h3>
+                <p>Dive into the pricing inputs, latency baselines, and token density heuristics that power the calculator.</p>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    selected_key = st.session_state.get("reference_selected", REFERENCE_DOCS[0]["key"])
+    pending_selected = selected_key
+
+    cols = st.columns(len(REFERENCE_DOCS))
+    for col, doc in zip(cols, REFERENCE_DOCS):
+        with col:
+            clicked = st.button(
+                f"{doc['emoji']} {doc['label']}",
+                key=f"reference-card-{doc['key']}",
+                use_container_width=True,
+            )
+            if clicked:
+                pending_selected = doc["key"]
+
+            is_selected = doc["key"] == pending_selected
+            card_class = "reference-card reference-card-selected" if is_selected else "reference-card"
+
+            st.markdown(
+                f"""
+                <div class="{card_class}">
+                    <p class="reference-card-body">{doc["description"]}</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+    # Update selection post-buttons
+    if pending_selected != selected_key:
+        st.session_state["reference_selected"] = pending_selected
+    selected_key = pending_selected
+    selected_doc = next((doc for doc in REFERENCE_DOCS if doc["key"] == selected_key), REFERENCE_DOCS[0])
+
+    st.markdown("---")
+    content = _load_markdown(selected_doc["path"])
+    st.markdown(content, unsafe_allow_html=False)
+
+    for image_info in selected_doc.get("images", []):
+        image_path = image_info["path"]
+        if image_path.exists():
+            st.image(str(image_path), caption=image_info.get("caption"))
+        else:
+            st.warning(f"Missing image: {image_path.name}")
 
 
 def render_comparison_summary(results: list[CalculationResult]) -> None:
