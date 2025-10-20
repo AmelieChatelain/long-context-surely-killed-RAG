@@ -1,0 +1,27 @@
+"""Application configuration constants."""
+
+# Pricing constants
+EMBEDDING_PRICE_PER_MILLION = 0.12
+RERANK_PRICE_PER_QUERY = 0.002
+RERANK_TOP_K = 20
+QUERY_TOKEN_SIZE = 50
+TYPICAL_OUTPUT_TOKEN_SIZE = 1000
+TOKENS_PER_CHUNK = 800
+
+# Latency constants
+BASE_NET_OVERHEAD = 0.15  # s, network + provider jitter
+TTFT_1K = 0.50  # s (TTFT at 1k prompt tokens)
+TTFT_10K = 2.0  # s (TTFT at 10k)
+TTFT_100K = 12.0  # s (TTFT at 100k)
+
+# Document constants
+AVG_PAGES_PER_DOCUMENT = 10
+
+# Default values
+DEFAULT_KB_PAGES = 1_000
+DEFAULT_REQUESTS_PER_DAY = 1_000
+DEFAULT_KB_UPDATES_PER_MONTH = 4
+DEFAULT_TOP_K = 3
+DEFAULT_VECTOR_DB_BASE_COST = 26.0
+DEFAULT_GREP_TRIES = 4
+DEFAULT_GREP_DOCS_RETRIEVED = 1
