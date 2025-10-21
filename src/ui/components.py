@@ -1,5 +1,6 @@
 """Reusable UI components for the calculator."""
 
+import base64
 from functools import cache
 from pathlib import Path
 from typing import Optional
@@ -41,6 +42,14 @@ REFERENCE_DOCS = [
         "path": RESOURCE_ROOT / "TOKEN_PER_PAGE.md",
     },
 ]
+
+
+@cache
+def get_resource_base64(path: Path) -> str:
+    """Return a data URI for the given asset."""
+    raw = path.read_bytes()
+    encoded = base64.b64encode(raw).decode("ascii")
+    return f"data:image/png;base64,{encoded}"
 
 
 @cache
@@ -178,6 +187,30 @@ def render_comparison_column(result: CalculationResult) -> None:
     render_cost_breakdown(result)
 
 
+def render_brand_credit(*, twitter_url: str) -> None:
+    """Display the creator credit with LightOn branding."""
+    logo_path = RESOURCE_ROOT / "lighton_logo.png"
+
+    try:
+        logo_src = get_resource_base64(logo_path)
+    except FileNotFoundError:
+        st.markdown(
+            f'<div class="brand-cta-fallback">Made by <a href="{twitter_url}" target="_blank">Amélie Chatelain</a></div>',
+            unsafe_allow_html=True,
+        )
+        return
+
+    st.markdown(
+        f"""
+        <a class="brand-cta" href="{twitter_url}" target="_blank" rel="noopener noreferrer">
+            <span>Made by <strong>Amélie</strong></span>
+            <img src="{logo_src}" alt="LightOn logo" />
+        </a>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def render_latency_breakdown(result: CalculationResult) -> None:
     """Render expandable latency breakdown for RAG systems."""
     with st.expander("Latency Breakdown"):
@@ -292,7 +325,7 @@ def render_reference_library() -> None:
                 <p>Dive into the pricing inputs, latency baselines, and token density heuristics that power the calculator.</p>
             </div>
         </div>
-        """,
+        """,  # noqa: E501
         unsafe_allow_html=True,
     )
 

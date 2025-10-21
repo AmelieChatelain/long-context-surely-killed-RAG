@@ -1,47 +1,20 @@
-# RAG vs Long Context Pricing Calculator
+# RAG vs Long Context Cost Calculator
 
-Interactive Streamlit app to compare costs between RAG and long context approaches with enhanced UI and modular architecture.
+A little Streamlit app for checking how much RAG vs long-context setups really cost. Stream it, tweak a few sliders, and see how rAg iS dEaD jUsT uSe LoNg cOnTeXt. The demo is available now at [Long Context Surely Killed RAG](https://long-context-surely-killed-rag.streamlit.app/).
 
-## Installation
+## Get rolling
 
 ```bash
 pip install -r requirements.txt
-```
-
-## Run
-
-```bash
 streamlit run app.py
 ```
 
-## Features
+## Why bother
 
-- **Modular Architecture**: Clean separation of concerns with calculators, models, and UI components
-- **Enhanced UI**: Aligned comparison metrics with visual hierarchy and highlighting
-- **Input in pages** (not tokens): Select document density and page count
-- **Four comparison modes**:
-  - **Long Context (No Cache)**: Full KB sent every request (💀 expensive)
-  - **Long Context (Cache)**: KB cached monthly, only query tokens charged per request
-  - **Just Grep**: Multi-attempt file search baseline
-  - **RAG w/ Vector DB**: Only retrieved chunks + query per request
+- Four head-to-head modes: long context (with/without cache), plain grep, and RAG with a vector DB
+- Inputs in pages instead of raw tokens so you can think in documents, not math
+- If you don't like my heuristics, get into the code! The latency heuristics are mostly in `src/utils/latency.py` and the pricing ones are in `src/models/pricing.py`.
 
-## Document Density Options
+## Want the nitty-gritty?
 
-- **Sparse (400 tok/page)**: Code, tables, bullet lists
-- **Typical (600 tok/page)**: Standard docs, research papers (default)
-- **Dense (800 tok/page)**: Dense prose, novels, technical documentation
-- **Images (1100 tok/page)**: PDF Pages processed as images
-
-## Architecture
-
-```
-src/
-├── models/          # Data models and pricing configuration
-├── calculators/     # Business logic for each approach
-├── ui/             # UI components and styling
-└── utils/          # Utility functions
-```
-
-## Deployment
-
-The app is ready for deployment on Streamlit Cloud or any platform supporting Streamlit.
+All the deeper notes, price tables, and design docs live in `./resources`.

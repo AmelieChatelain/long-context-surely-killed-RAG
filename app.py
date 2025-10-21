@@ -2,35 +2,38 @@
 
 import streamlit as st
 
-from src.ui.sidebar import render_sidebar
-from src.ui.components import render_comparison_column, render_comparison_summary, render_reference_library
-from src.ui.styles import apply_custom_styles
+from src.calculators.grep import GrepCalculator
 from src.calculators.long_context import LongContextNoCache, LongContextWithCache
 from src.calculators.rag import RAGCalculator
-from src.calculators.grep import GrepCalculator
+from src.ui.components import (
+    render_brand_credit,
+    render_comparison_column,
+    render_comparison_summary,
+    render_reference_library,
+)
+from src.ui.sidebar import render_sidebar
+from src.ui.styles import apply_custom_styles
 
 
 def main():
     """Main application entry point."""
-    # Page configuration
-    st.set_page_config(page_title="RAG vs Long Context Pricing", layout="wide")
-    
-    # Apply custom styles
+    st.set_page_config(page_title="Long Context Surely Killed RAG", layout="wide")
+
     apply_custom_styles()
-    
-    # App header
-    st.title("RAG vs Long Context: Cost Calculator")
-    
-    # Render sidebar and get parameters
+
+    header_col, credit_col = st.columns([4, 1], gap="small")
+    with header_col:
+        st.title("Long Context Surely Killed RAG")
+    with credit_col:
+        render_brand_credit(twitter_url="https://twitter.com/AmelieTabatta")
+
     params = render_sidebar()
-    
+
     st.caption("Tune your scenario, compare run costs, and browse assumptions in the Reference Library tab.")
 
-    # Set up main content tabs
     calculator_tab, reference_tab = st.tabs(["📊 Calculator", "📚 Reference Library"])
 
     with calculator_tab:
-        # Initialize calculators
         calculators = [
             LongContextNoCache(),
             LongContextWithCache(),
@@ -38,10 +41,8 @@ def main():
             RAGCalculator(),
         ]
 
-        # Calculate results
         results = [calc.calculate(params) for calc in calculators]
 
-        # Render comparison columns
         st.markdown("---")
         col1, col2, col3, col4, col5 = st.columns(5)
 

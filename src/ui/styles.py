@@ -257,6 +257,52 @@ CUSTOM_CSS = """
     border-radius: 999px;
     padding: 0.5rem 0.75rem;
 }
+
+.brand-cta,
+.brand-cta:visited {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.75rem 2rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #493576 0%, #1C1234 100%);
+    color: #f8f9fa;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.brand-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+    color: #f8f9fa;
+}
+
+.brand-cta span {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1.2;
+}
+
+.brand-cta strong {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.brand-cta img {
+    height: 30px;
+    width: auto;
+    display: block;
+}
+
+.brand-cta-fallback {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
 </style>
 """
 
@@ -264,4 +310,5 @@ CUSTOM_CSS = """
 def apply_custom_styles():
     """Apply custom CSS styles to the Streamlit app."""
     import streamlit as st
+
     st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
