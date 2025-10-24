@@ -8,7 +8,7 @@ I wanted to limit myself to models that could handle a context length of 1M. The
 
 ### Available Pricing Plans
 
-| Plan | Provider | Context Window | Tier Condition | Input $ / M tokens | Output $ / M tokens | Cache Write $ / M tokens | Cache Read $ / M tokens | Notes |
+| Plan | Provider | Context Window | Tier Condition | Input \$ / M tokens | Output \$ / M tokens | Cache Write \$ / M tokens | Cache Read \$ / M tokens | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `claude-3.5-sonnet-1m` | Anthropic Claude 3.5 Sonnet | 1,000,000 | ≤ 200k prompt tokens | 3.00 | 15.00 | 3.75 | 0.30 | Mirrors Anthropic's 1M context pricing for Claude 3.5 Sonnet. |
 |  |  |  | > 200k prompt tokens | 6.00 | 22.50 | 7.50 | 0.60 | Higher-tier pricing once the prompt crosses 200k tokens. |
@@ -20,15 +20,16 @@ Updated on Oct 2025, prices are subject to changes.
 
 ### Embedding
 
-We price embeddings at **$0.12 per 1M tokens**, matching Cohere's [embed v4](https://cohere.com/pricing). The calculator multiplies this rate by the total tokens re-indexed each month, so larger corpora or frequent updates dominate the embedding spend. However, in practice, one of the strength of a proper Vector DB RAG system is that one wouldn't need to re-index their WHOLE knowledge base if it changes.
+We price embeddings at **\$0.12 per 1M tokens**, matching Cohere's [embed v4](https://cohere.com/pricing). Note that we made the pessimistic assumption for RAG that the entire knowledge base would have to be reindexed at each update. Obviously, one of the advantage of building a RAG pipeline over a VectorDB is that updating one doc doesn't require to update everything!
+
 
 ### Reranking
 
-Reranking uses Cohere's rerank-3.5 at **$2.00 per 1,000 requests** (=$0.002/query), also sourced from the same pricing page. The model is list-wise: the price does **not** scale with `rerank_top_k`, but it is bound by a **4,096 token** context window. We deduct the query length and fit as many retrieved chunks as possible per call, batching additional calls when `top_k × tokens_per_chunk` exceeds the remaining budget.
+Reranking uses Cohere's rerank-3.5 at **\$2.00 per 1,000 requests** (=\$0.002/query), also sourced from the same pricing page. The model is list-wise: the price does **not** scale with `rerank_top_k`, but it is bound by a **4,096 token** context window. We deduct the query length and fit as many retrieved chunks as possible per call, batching additional calls when `top_k × tokens_per_chunk` exceeds the remaining budget.
 
 ### Vector DB Base Cost
 
-`RAGParams.vector_db_base_cost` defaults to **$26/month**. This is an estimate that splits the difference between self-hosting (e.g. Weaviate on your own infrastructure can be cheaper, not counting maintenance) and managed services with minimum commitments (Pinecone begins around \$50/month, per [their pricing](https://www.pinecone.io/pricing/)). Override this value if you have concrete hosting numbers.
+The Vector DB base cost defaults to **\$26/month**. This is an estimate that splits the difference between self-hosting (e.g. Weaviate on your own infrastructure can be cheaper, not counting maintenance) and managed services with minimum commitments (Pinecone begins around \$50/month, per [their pricing](https://www.pinecone.io/pricing/)). Override this value if you have concrete hosting numbers.
 
 ## Grep Baseline Assumptions
 

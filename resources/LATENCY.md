@@ -39,7 +39,7 @@ Note: Anthropic reports cache speedups ranging from 2-10x depending on cache siz
 
 ### Reranking (Cohere rerank-v3.5)
 
-We estimate around 150ms to rerank 24 documents: benchmarks can be found ib [Oracle's documentation](https://docs.oracle.com/en-us/iaas/Content/generative-ai/benchmark-cohere-rerank-3-5.htm).
+We estimate around 150ms to rerank 24 documents: benchmarks can be found in [Oracle's documentation](https://docs.oracle.com/en-us/iaas/Content/generative-ai/benchmark-cohere-rerank-3-5.htm).
 
 ## E2E Latency Calculation
 
@@ -66,6 +66,8 @@ Where indexing is amortized across monthly requests:
 ```text
 Indexing_Amortized = (corpus_tokens / Embedding_Throughput) × updates_per_month / requests_per_month
 ```
+
+Note that we made the pessimistic assumption for RAG that the entire knowledge base would have to be reindexed at each update. Obviously, one of the advantage of building a RAG pipeline over a VectorDB is that updating one doc doesn't require to update everything!
 
 ## Limitations & Assumptions
 

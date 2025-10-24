@@ -29,7 +29,13 @@ def main():
 
     params = render_sidebar()
 
-    st.caption("Tune your scenario, compare run costs, and browse assumptions in the Reference Library tab.")
+    st.markdown(
+        """
+        People love to say long context blows your budget compared to RAG, let's actually run the numbers!
+        Tweak the knobs below and see how brut long-context, cached long-context, grep, and vector DBs shake out.
+        All our assumptions are available in the Reference Library.
+        """  # noqa: E501
+    )
 
     calculator_tab, reference_tab = st.tabs(["📊 Calculator", "📚 Reference Library"])
 
